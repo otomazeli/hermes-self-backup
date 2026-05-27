@@ -364,8 +364,7 @@ fi
 
 echo -e "${YELLOW}Cloning backup ...${NC}"
 rm -rf "$RESTORE_DIR"
-CLONE_URL="https://github.com/$REPO"
-git clone "$CLONE_URL" "$RESTORE_DIR" --depth 1 --quiet || {
+gh repo clone "$REPO" "$RESTORE_DIR" -- -q || {
     echo -e "${RED}Clone failed.${NC}"; exit 1
 }
 
@@ -462,7 +461,7 @@ if [ -f "$RESTORE_DIR/secrets.gpg" ]; then
         fi
     fi
 else
-    echo -e "${YELLOW}No encrypted secrets in backup. Re-enter credentials in ~/.hermes/.env after restore.${NC}"
+    echo -e "${YELLOW}No encrypted secrets in backup. Re-enter credentials in your local secrets file after restore.${NC}"
 fi
 
 for pgpg in "$RESTORE_DIR/profiles"/*/secrets.gpg; do
@@ -486,7 +485,7 @@ echo "Next steps:"
 echo "  1. hermes config check"
 echo "  2. hermes skills list"
 echo "  3. hermes cron list"
-echo "  4. If secrets were not restored, re-enter credentials in ~/.hermes/.env"
+echo "  4. If secrets were not restored, re-enter credentials in your local secrets file"
 echo "  5. hermes doctor"
 echo ""
 log "Restored from $REPO (backup date: $MANIFEST_DATE)"
